@@ -17,6 +17,11 @@ public class EnemySpawner : MonoBehaviour
 
     float cooldown;
 
+    void Start()
+    {
+        manager = World.DefaultGameObjectInjectionWorld.EntityManager;
+        //enemyEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(enemyPrefab, World.Active);
+    }
     private void Update()
     {
         if (!spawnEnemies || GameManager.IsPlayerDead())

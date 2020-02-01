@@ -22,7 +22,7 @@ public class CharacterMovement : MonoBehaviour
 	{
 		_controls = new Controls();
 		entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-		bulletEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(bulletPrefab, World.DefaultGameObjectInjectionWorld);
+		bulletEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(bulletPrefab, GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, new BlobAssetStore()));
 	}
 
 	private void OnEnable()
@@ -56,7 +56,6 @@ public class CharacterMovement : MonoBehaviour
 
 	private void Fire_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
 	{
-		Debug.Log("Bullet fired");
 		Entity bullet = entityManager.Instantiate(bulletEntityPrefab);
 		entityManager.SetComponentData(bullet, new Translation { Value = GameManager.PlayerPosition });
 	}

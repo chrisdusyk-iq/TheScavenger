@@ -5,6 +5,8 @@ using Unity.Transforms;
 using Unity.Collections;
 using Unity.Mathematics;
 
+[UpdateAfter(typeof(MoveForwardSystem))]
+[UpdateBefore(typeof(TimedDestroySystem))]
 public class CollisionSystem : JobComponentSystem
 {
 	EntityQuery enemyGroup;

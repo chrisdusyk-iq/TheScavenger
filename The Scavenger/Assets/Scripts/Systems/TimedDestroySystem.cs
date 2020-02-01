@@ -1,8 +1,8 @@
 ﻿using Unity.Entities;
 using Unity.Jobs;
+using Unity.Transforms;
 
-
-//[UpdateAfter(typeof(MoveForwardSystem))]
+[UpdateAfter(typeof(MoveForwardSystem))]
 public class TimedDestroySystem : JobComponentSystem
 {
 	EndSimulationEntityCommandBufferSystem buffer;

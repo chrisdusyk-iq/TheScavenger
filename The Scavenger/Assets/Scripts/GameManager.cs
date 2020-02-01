@@ -28,19 +28,19 @@ public class GameManager : MonoBehaviour
 		return main.player == null;
 	}
 
-	public static Vector2 PlayerPosition
+	public static Vector3 PlayerPosition
 	{
 		get { return main.player.position; }
 	}
 
-	public static Vector2 GetPositionAroundPlayer(float radius)
+	public static Vector3 GetPositionAroundPlayer(float radius)
 	{
-		Vector2 playerPos = main.player.position;
+		Vector3 playerPos = main.player.position;
 
 		float angle = UnityEngine.Random.Range(0f, 2 * Mathf.PI);
 		float s = Mathf.Sin(angle);
 		float c = Mathf.Cos(angle);
 
-		return new Vector2(c * radius, s * radius) + playerPos;
+		return new Vector3(c * radius, 1.1f, s * radius) + playerPos;
 	}
 }

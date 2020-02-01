@@ -17,6 +17,19 @@ public class EnemySpawner : MonoBehaviour
 
     float cooldown;
 
+    private void Update()
+    {
+        if (!spawnEnemies || GameManager.IsPlayerDead())
+            return;
+
+        cooldown -= Time.deltaTime;
+
+        if (cooldown <= 0f)
+        {
+            cooldown += spawnInterval;
+            Spawn();
+        }
+    }
     void Spawn()
     {
         for (int i = 0; i < spawnsPerInterval; i++)

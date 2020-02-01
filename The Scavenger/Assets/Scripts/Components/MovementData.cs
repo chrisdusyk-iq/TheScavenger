@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [GenerateAuthoringComponent]
-public struct ProjectileMovementData : IComponentData
+public struct MovementData : IComponentData
 {
 	public Vector2 direction;
 	public float speed;

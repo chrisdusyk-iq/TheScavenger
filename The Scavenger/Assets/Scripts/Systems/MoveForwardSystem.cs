@@ -17,7 +17,7 @@ namespace Unity.Transforms
 			{
 				float3 forward = math.forward(rot.Value);
 				forward.z = 0f;
-				pos.Value += (dt * speed.Value * forward);
+				pos.Value += dt * speed.Value * forward;
 			}
 		}
 

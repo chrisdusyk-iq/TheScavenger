@@ -19,6 +19,7 @@ public class CharacterMovement : MonoBehaviour
 	{
 		_controls = new Controls();
 		_movementVector = Vector3.zero;
+		entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 	}
 
 	private void OnEnable()

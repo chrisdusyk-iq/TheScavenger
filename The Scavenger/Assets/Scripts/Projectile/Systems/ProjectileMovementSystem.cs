@@ -1,13 +1,14 @@
 ﻿using Unity.Entities;
 using Unity.Jobs;
+using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
 
-public class RobotMovementSystem : JobComponentSystem
+public class ProjectileMovementSystem : JobComponentSystem
 {
 	protected override JobHandle OnUpdate(JobHandle inputDeps)
 	{
-		JobHandle robotMovementHandle = Entities.ForEach((ref Translation translation, in RobotMovementData robotMovementData) =>
+		JobHandle robotMovementHandle = Entities.ForEach((ref PhysicsVelocity velocity, in ProjectileMovementData projectileMovementData) =>
 		{
 			translation.Value = 0f;
 		}).Schedule(inputDeps);

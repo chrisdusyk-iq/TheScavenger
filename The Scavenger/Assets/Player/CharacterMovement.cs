@@ -12,14 +12,18 @@ public class CharacterMovement : MonoBehaviour
 	[SerializeField]
 	private float _movementSpeed = 20.0f;
 
+	[Header("Bullets")]
+	public GameObject bulletPrefab;
+
 	EntityManager entityManager;
-	Entity bulletPrefab;
+	private Entity bulletEntityPrefab;
 
 	void Awake()
 	{
 		_controls = new Controls();
 		_movementVector = Vector3.zero;
 		entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+		bulletEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(bulletPrefab, World.DefaultGameObjectInjectionWorld);
 	}
 
 	private void OnEnable()
@@ -54,7 +58,7 @@ public class CharacterMovement : MonoBehaviour
 	private void Fire_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
 	{
 		Debug.Log("Bullet fired");
-		Entity bullet = entityManager.Instantiate(bulletPrefab);
+		Entity bullet = entityManager.Instantiate(bulletEntityPrefab);
 		entityManager.SetComponentData(bullet, new Translation { Value = GameManager.PlayerPosition });
 	}
 

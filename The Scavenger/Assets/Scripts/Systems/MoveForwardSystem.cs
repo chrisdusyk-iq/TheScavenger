@@ -9,13 +9,13 @@ namespace Unity.Transforms
 	public class MoveForwardSystem : JobComponentSystem
 	{
 		[RequireComponentTag(typeof(MoveForward))]
-		struct MoveForwardRotation : IJobForEach<Translation, Rotation, MoveSpeed, LocalToWorld>
+		struct MoveForwardRotation : IJobForEach<Translation, Rotation, MoveSpeed>
 		{
 			public float dt;
 
-			public void Execute(ref Translation pos, [ReadOnly] ref Rotation rot, [ReadOnly] ref MoveSpeed speed, [ReadOnly] ref LocalToWorld localToWorld)
+			public void Execute(ref Translation pos, [ReadOnly] ref Rotation rot, [ReadOnly] ref MoveSpeed speed)
 			{
-				pos.Value += (dt * speed.Value * new float3(0f, 1f, 0f));
+				pos.Value += (dt * speed.Value * math.forward(rot.Value));
 			}
 		}
 

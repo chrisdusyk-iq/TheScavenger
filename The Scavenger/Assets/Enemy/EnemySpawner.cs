@@ -12,6 +12,7 @@ public class EnemySpawner : MonoBehaviour
     [Range(1, 100)] public int spawnsPerInterval = 1;
     [Range(.1f, 2f)] public float spawnInterval = 1f;
 
+    public GameObject enemyPrefab;
     EntityManager manager;
     Entity enemyEntityPrefab;
 
@@ -20,7 +21,7 @@ public class EnemySpawner : MonoBehaviour
     void Start()
     {
         manager = World.DefaultGameObjectInjectionWorld.EntityManager;
-        //enemyEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(enemyPrefab, World.Active);
+        enemyEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(enemyPrefab, World.Active);
     }
     private void Update()
     {

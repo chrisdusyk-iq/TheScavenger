@@ -32,4 +32,15 @@ public class GameManager : MonoBehaviour
 	{
 		get { return main.player.position; }
 	}
+
+	public static Vector3 GetPositionAroundPlayer(float radius)
+	{
+		Vector3 playerPos = main.player.position;
+
+		float angle = UnityEngine.Random.Range(0f, 2 * Mathf.PI);
+		float s = Mathf.Sin(angle);
+		float c = Mathf.Cos(angle);
+
+		return new Vector3(c * radius, 1.1f, s * radius) + playerPos;
+	}
 }

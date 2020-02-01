@@ -23,7 +23,7 @@ public class CharacterMovement : MonoBehaviour
 		_controls = new Controls();
 		_movementVector = Vector3.zero;
 		entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-		bulletEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(bulletPrefab, World.DefaultGameObjectInjectionWorld);
+		bulletEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(bulletPrefab, GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, new BlobAssetStore()));
 	}
 
 	private void OnEnable()

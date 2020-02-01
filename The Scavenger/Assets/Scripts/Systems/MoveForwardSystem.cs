@@ -14,7 +14,7 @@ namespace Unity.Transforms
 
 			public void Execute(ref Translation pos, [ReadOnly] ref Rotation rot, [ReadOnly] ref MoveSpeed speed)
 			{
-				pos.Value = pos.Value + (dt * speed.Value * math.forward(rot.Value));
+				pos.Value += (dt * speed.Value * math.forward(rot.Value));
 			}
 		}
 

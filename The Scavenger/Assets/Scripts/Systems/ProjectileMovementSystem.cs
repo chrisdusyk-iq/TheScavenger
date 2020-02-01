@@ -8,9 +8,9 @@ public class ProjectileMovementSystem : JobComponentSystem
 {
 	protected override JobHandle OnUpdate(JobHandle inputDeps)
 	{
-		JobHandle robotMovementHandle = Entities.ForEach((ref PhysicsVelocity velocity, in ProjectileMovementData projectileMovementData) =>
+		JobHandle robotMovementHandle = Entities.ForEach((ref PhysicsVelocity velocity, in MovementData projectileMovementData) =>
 		{
-			translation.Value = 0f;
+			//translation.Value = 0f;
 		}).Schedule(inputDeps);
 
 		return robotMovementHandle;

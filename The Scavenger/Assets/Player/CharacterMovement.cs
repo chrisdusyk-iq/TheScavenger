@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.Entities;
+using Unity.Transforms;
 using UnityEngine;
 
 public class CharacterMovement : MonoBehaviour
@@ -47,7 +49,8 @@ public class CharacterMovement : MonoBehaviour
 
     private void Fire_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        Debug.Log("Fire");
+		Entity bullet = entityManager.Instantiate(bulletPrefab);
+		entityManager.SetComponentData(bullet, new Translation { Value = GameManager.PlayerPosition });
     }
 
     private void Update()

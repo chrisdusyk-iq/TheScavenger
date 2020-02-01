@@ -5,6 +5,7 @@ using UnityEngine;
 public class CharacterRotation : MonoBehaviour
 {
     private Controls _controls;
+    private Vector2 _aimPoint;
 
     void Awake()
     {
@@ -14,22 +15,25 @@ public class CharacterRotation : MonoBehaviour
     void OnEnable()
     {
         _controls.Character.Aim.performed += Aim_performed;
+        _controls.Character.Aim.Enable();
+    }
+
+    void OnDisable()
+    {
+        _controls.Character.Aim.performed -= Aim_performed;
+        _controls.Character.Aim.Disable();
     }
 
     private void Aim_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        throw new System.NotImplementedException();
+        _aimPoint = obj.ReadValue<Vector2>();
+        Debug.Log(_aimPoint);
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        
+        var screenPosition = Camera.main.WorldToScreenPoint(transform.position);
+        var angle = Mathf.Atan2(screenPosition.y - _aimPoint.y, screenPosition.x - _aimPoint.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 }

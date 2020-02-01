@@ -14,6 +14,7 @@ public class CharacterMovement : MonoBehaviour
 
 	[Header("Bullets")]
 	public GameObject bulletPrefab;
+	public Transform gunBarrel;
 
 	EntityManager entityManager;
 	private Entity bulletEntityPrefab;
@@ -57,7 +58,9 @@ public class CharacterMovement : MonoBehaviour
 	private void Fire_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
 	{
 		Entity bullet = entityManager.Instantiate(bulletEntityPrefab);
-		entityManager.SetComponentData(bullet, new Translation { Value = GameManager.PlayerPosition });
+		Vector3 rotation = gunBarrel.rotation.eulerAngles;
+		entityManager.SetComponentData(bullet, new Translation { Value = gunBarrel.position });
+		entityManager.SetComponentData(bullet, new Rotation { Value = Quaternion.Euler(rotation) });
 	}
 
 	private void Update()

@@ -6,7 +6,7 @@ public class EnemySpawner : MonoBehaviour
 {
     [Header("Enemy Spawn Info")]
     public bool spawnEnemies = false;
-    public float enemySpawnRadius = 10f;
+    public float enemySpawnRadius = 25f;
 
     [Header("Enemy Spawn Timing")]
     [Range(1, 100)] public int spawnsPerInterval = 1;

@@ -21,7 +21,6 @@ public class CharacterMovement : MonoBehaviour
 	void Awake()
 	{
 		_controls = new Controls();
-		_movementVector = Vector3.zero;
 		entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 		bulletEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(bulletPrefab, GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, new BlobAssetStore()));
 	}
@@ -41,8 +40,8 @@ public class CharacterMovement : MonoBehaviour
 		_controls.Character.Move.performed += Move_performed;
 		_controls.Character.Fire.performed += Fire_performed;
 		_controls.Character.Enable();
-
 	}
+
 	private void DisableCharacterControls()
 	{
 		_controls.Character.Move.performed -= Move_performed;
@@ -52,7 +51,7 @@ public class CharacterMovement : MonoBehaviour
 
 	private void Move_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
 	{
-		_inputVector = obj.ReadValue<Vector2>().normalized;
+		_inputVector = obj.ReadValue<Vector2>();
 	}
 
 	private void Fire_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -61,11 +60,9 @@ public class CharacterMovement : MonoBehaviour
 		entityManager.SetComponentData(bullet, new Translation { Value = GameManager.PlayerPosition });
 	}
 
-
 	private void Update()
 	{
 		transform.position += Time.deltaTime * new Vector3(_inputVector.x, _inputVector.y, 0) * _movementSpeed;
 
 	}
-
 }

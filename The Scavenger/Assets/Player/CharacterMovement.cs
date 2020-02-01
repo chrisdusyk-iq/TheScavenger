@@ -8,14 +8,12 @@ public class CharacterMovement : MonoBehaviour
 {
     private Controls _controls;
     private Vector2 _inputVector;
-    private Vector3 _movementVector;
     [SerializeField]
     private float _movementSpeed = 20.0f;
 
     void Awake()
     {
-        _controls = new Controls();
-        _movementVector = Vector3.zero;
+        _controls = new Controls();        
     }
 
     private void OnEnable()
@@ -44,7 +42,7 @@ public class CharacterMovement : MonoBehaviour
 
     private void Move_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        _inputVector = obj.ReadValue<Vector2>().normalized;
+        _inputVector = obj.ReadValue<Vector2>();
     }
 
     private void Fire_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -54,11 +52,8 @@ public class CharacterMovement : MonoBehaviour
         Debug.Log("fire");
     }
 
-
     private void Update()
     {
         transform.position += Time.deltaTime * new Vector3(_inputVector.x, _inputVector.y, 0) *_movementSpeed;
-
     }
-
 }

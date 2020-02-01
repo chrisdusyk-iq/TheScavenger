@@ -2,19 +2,20 @@
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace Unity.Transforms
 {
 	public class MoveForwardSystem : JobComponentSystem
 	{
 		[RequireComponentTag(typeof(MoveForward))]
-		struct MoveForwardRotation : IJobForEach<Translation, Rotation, MoveSpeed>
+		struct MoveForwardRotation : IJobForEach<Translation, Rotation, MoveSpeed, LocalToWorld>
 		{
 			public float dt;
 
-			public void Execute(ref Translation pos, [ReadOnly] ref Rotation rot, [ReadOnly] ref MoveSpeed speed)
+			public void Execute(ref Translation pos, [ReadOnly] ref Rotation rot, [ReadOnly] ref MoveSpeed speed, [ReadOnly] ref LocalToWorld localToWorld)
 			{
-				pos.Value += (dt * speed.Value * math.forward(rot.Value));
+				pos.Value += (dt * speed.Value * new float3(0f, 1f, 0f));
 			}
 		}
 

@@ -13,4 +13,6 @@ public class GameManager : MonoBehaviour
 		main = this;
 		entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 	}
+
+	// BLAH BLAH BLAH CODE IS HERE
 }

@@ -14,5 +14,5 @@ public class GameManager : MonoBehaviour
 		entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 	}
 
-	// BLAH BLAH BLAH CODE IS HERE
+	// BLAH BLAH BLAH CODE IS SOMEWHERE ELSE NOW
 }

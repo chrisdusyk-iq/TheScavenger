@@ -57,7 +57,6 @@ public class CharacterMovement : MonoBehaviour
 
 	private void Fire_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
 	{
-		Debug.Log("Bullet fired");
 		Entity bullet = entityManager.Instantiate(bulletEntityPrefab);
 		entityManager.SetComponentData(bullet, new Translation { Value = GameManager.PlayerPosition });
 	}

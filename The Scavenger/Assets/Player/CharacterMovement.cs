@@ -5,11 +5,15 @@ using UnityEngine;
 public class CharacterMovement : MonoBehaviour
 {
     private Controls _controls;
-    private Vector2 _playerVelocity;
+    private Vector2 _inputVector;
+    private Vector3 _movementVector;
+    [SerializeField]
+    private float _movementSpeed = 3.0f;
 
     void Awake()
     {
         _controls = new Controls();
+        _movementVector = Vector3.zero;
     }
 
     private void OnEnable()
@@ -38,8 +42,7 @@ public class CharacterMovement : MonoBehaviour
 
     private void Move_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        _playerVelocity = obj.ReadValue<Vector2>();
-        Debug.Log(_playerVelocity);
+        _inputVector = obj.ReadValue<Vector2>().normalized;
     }
 
     private void Fire_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -50,6 +53,7 @@ public class CharacterMovement : MonoBehaviour
     private void Update()
     {
 
+        transform.position += Time.deltaTime * new Vector3(_inputVector.x, 0, _inputVector.y);
     }
 
 }

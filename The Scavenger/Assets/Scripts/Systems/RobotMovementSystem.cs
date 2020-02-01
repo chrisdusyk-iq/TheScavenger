@@ -7,7 +7,7 @@ public class RobotMovementSystem : JobComponentSystem
 {
 	protected override JobHandle OnUpdate(JobHandle inputDeps)
 	{
-		JobHandle robotMovementHandle = Entities.ForEach((ref Translation translation, in RobotMovementData robotMovementData) =>
+		JobHandle robotMovementHandle = Entities.ForEach((ref Translation translation, in MovementData robotMovementData) =>
 		{
 			translation.Value = 0f;
 		}).Schedule(inputDeps);

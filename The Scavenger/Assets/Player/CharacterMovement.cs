@@ -10,7 +10,7 @@ public class CharacterMovement : MonoBehaviour
     private Vector2 _inputVector;
     private Vector3 _movementVector;
     [SerializeField]
-    private float _movementSpeed = 3.0f;
+    private float _movementSpeed = 20.0f;
 
     void Awake()
     {
@@ -49,14 +49,16 @@ public class CharacterMovement : MonoBehaviour
 
     private void Fire_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-		Entity bullet = entityManager.Instantiate(bulletPrefab);
-		entityManager.SetComponentData(bullet, new Translation { Value = GameManager.PlayerPosition });
+        //Entity bullet = entityManager.Instantiate(bulletPrefab);
+        //entityManager.SetComponentData(bullet, new Translation { Value = GameManager.PlayerPosition });
+        Debug.Log("fire");
     }
+
 
     private void Update()
     {
+        transform.position += Time.deltaTime * new Vector3(_inputVector.x, _inputVector.y, 0) *_movementSpeed;
 
-        transform.position += Time.deltaTime * new Vector3(_inputVector.x, 0, _inputVector.y);
     }
 
 }

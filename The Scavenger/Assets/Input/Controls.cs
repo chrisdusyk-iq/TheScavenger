@@ -20,9 +20,9 @@ public class @Controls : IInputActionCollection, IDisposable
             ""actions"": [
                 {
                     ""name"": ""Move"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""d5af32db-53f7-4cdf-9f74-401b571e3f15"",
-                    ""expectedControlType"": """",
+                    ""expectedControlType"": ""Stick"",
                     ""processors"": """",
                     ""interactions"": """"
                 },
@@ -39,8 +39,8 @@ public class @Controls : IInputActionCollection, IDisposable
                 {
                     ""name"": ""WASD"",
                     ""id"": ""6f061bcb-17ff-4c19-b667-15f177214277"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": ""Hold"",
+                    ""path"": ""2DVector(normalize=false)"",
+                    ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Move"",

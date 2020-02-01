@@ -6,59 +6,62 @@ using UnityEngine;
 
 public class CharacterMovement : MonoBehaviour
 {
-    private Controls _controls;
-    private Vector2 _inputVector;
-    private Vector3 _movementVector;
-    [SerializeField]
-    private float _movementSpeed = 20.0f;
+	private Controls _controls;
+	private Vector2 _inputVector;
+	private Vector3 _movementVector;
+	[SerializeField]
+	private float _movementSpeed = 20.0f;
 
-    void Awake()
-    {
-        _controls = new Controls();
-        _movementVector = Vector3.zero;
-    }
+	EntityManager entityManager;
+	Entity bulletPrefab;
 
-    private void OnEnable()
-    {
-        EnableCharacterControls();
-    }
+	void Awake()
+	{
+		_controls = new Controls();
+		_movementVector = Vector3.zero;
+	}
 
-    private void OnDisable()
-    {
-        DisableCharacterControls();
-    }
+	private void OnEnable()
+	{
+		EnableCharacterControls();
+	}
 
-    private void EnableCharacterControls()
-    {
-        _controls.Character.Move.performed += Move_performed;
-        _controls.Character.Fire.performed += Fire_performed;
-        _controls.Character.Enable();
+	private void OnDisable()
+	{
+		DisableCharacterControls();
+	}
 
-    }
-    private void DisableCharacterControls()
-    {
-        _controls.Character.Move.performed -= Move_performed;
-        _controls.Character.Fire.performed -= Fire_performed;
-        _controls.Character.Disable();
-    }
+	private void EnableCharacterControls()
+	{
+		_controls.Character.Move.performed += Move_performed;
+		_controls.Character.Fire.performed += Fire_performed;
+		_controls.Character.Enable();
 
-    private void Move_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-    {
-        _inputVector = obj.ReadValue<Vector2>().normalized;
-    }
+	}
+	private void DisableCharacterControls()
+	{
+		_controls.Character.Move.performed -= Move_performed;
+		_controls.Character.Fire.performed -= Fire_performed;
+		_controls.Character.Disable();
+	}
 
-    private void Fire_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-    {
-        //Entity bullet = entityManager.Instantiate(bulletPrefab);
-        //entityManager.SetComponentData(bullet, new Translation { Value = GameManager.PlayerPosition });
-        Debug.Log("fire");
-    }
+	private void Move_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+	{
+		_inputVector = obj.ReadValue<Vector2>().normalized;
+	}
+
+	private void Fire_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+	{
+		Debug.Log("Bullet fired");
+		Entity bullet = entityManager.Instantiate(bulletPrefab);
+		entityManager.SetComponentData(bullet, new Translation { Value = GameManager.PlayerPosition });
+	}
 
 
-    private void Update()
-    {
-        transform.position += Time.deltaTime * new Vector3(_inputVector.x, _inputVector.y, 0) *_movementSpeed;
+	private void Update()
+	{
+		transform.position += Time.deltaTime * new Vector3(_inputVector.x, _inputVector.y, 0) * _movementSpeed;
 
-    }
+	}
 
 }

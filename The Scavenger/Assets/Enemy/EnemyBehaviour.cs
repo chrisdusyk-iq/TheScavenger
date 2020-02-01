@@ -22,12 +22,24 @@ public class EnemyBehaviour : MonoBehaviour, IConvertGameObjectToEntity
         if (!GameManager.IsPlayerDead())
         {
             Vector3 heading = GameManager.PlayerPosition - transform.position;
-            heading.y = 0f;
+            heading.z = 0f;
             transform.rotation = Quaternion.LookRotation(heading);
         }
 
         Vector3 movement = transform.forward * speed * Time.deltaTime;
         rigidBody.MovePosition(transform.position + movement);
+    }
+    void OnTriggerEnter(Collider theCollider)
+    {
+        if (!theCollider.CompareTag("Bullet"))
+            return;
+
+        enemyHealth--;
+
+        if (enemyHealth <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void Convert(Entity entity, EntityManager manager, GameObjectConversionSystem conversionSystem)

@@ -67,9 +67,8 @@ public class CollisionSystem : JobComponentSystem
 
 	struct CollisionWithScrapJob : IJobChunk
 	{
-		public float radius;
+		public float radiusSquared;
 
-		[ReadOnly]
 		public ArchetypeChunkComponentType<ScrapTag> scrapType;
 
 		[ReadOnly]
@@ -94,7 +93,7 @@ public class CollisionSystem : JobComponentSystem
 				{
 					Translation position2 = translationsToTestAgainst[j];
 
-					if (CheckCollision(position.Value, position2.Value, radius))
+					if (CheckCollision(position.Value, position2.Value, radiusSquared))
 					{
 						playerPickedUp = true;
 					}
@@ -116,9 +115,9 @@ public class CollisionSystem : JobComponentSystem
 		var translationType = GetArchetypeChunkComponentType<Translation>(true);
 		var scrapType = GetArchetypeChunkComponentType<ScrapTag>(false);
 
-		float enemyRadius = 0.3f;
-		float playerRadius = 0.5f;
-		float scrapRadius = 0.2f;
+		float enemyRadius = 1f;
+		float playerRadius = 2.5f;
+		float scrapRadius = 1f;
 
 		var jobEvB = new CollisionJob()
 		{
@@ -142,17 +141,17 @@ public class CollisionSystem : JobComponentSystem
 			translationsToTestAgainst = enemyGroup.ToComponentDataArray<Translation>(Allocator.TempJob)
 		};
 
-		JobHandle playerVersusEnemyHandle = jobPvE.Schedule(playerGroup, jobHandle);
+		jobHandle = jobPvE.Schedule(playerGroup, jobHandle);
 
-		var jobPlayerOnScrap = new CollisionWithScrapJob()
+		var jobScrapOnPlayer = new CollisionWithScrapJob()
 		{
-			radius = scrapRadius * scrapRadius,
+			radiusSquared = scrapRadius * scrapRadius,
 			scrapType = scrapType,
 			translationType = translationType,
-			translationsToTestAgainst = scrapGroup.ToComponentDataArray<Translation>(Allocator.TempJob)
+			translationsToTestAgainst = playerGroup.ToComponentDataArray<Translation>(Allocator.TempJob)
 		};
 
-		return jobPlayerOnScrap.Schedule(playerGroup, jobHandle);
+		return jobScrapOnPlayer.Schedule(scrapGroup, jobHandle);
 	}
 
 	static bool CheckCollision(float3 posA, float3 posB, float radiusSqr)

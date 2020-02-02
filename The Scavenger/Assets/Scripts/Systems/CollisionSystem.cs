@@ -4,6 +4,8 @@ using UnityEngine;
 using Unity.Transforms;
 using Unity.Collections;
 using Unity.Mathematics;
+using Unity.Physics.Systems;
+using Unity.Physics;
 
 [UpdateAfter(typeof(MoveForwardSystem))]
 [UpdateBefore(typeof(TimedDestroySystem))]
@@ -12,12 +14,51 @@ public class CollisionSystem : JobComponentSystem
 	EntityQuery enemyGroup;
 	EntityQuery bulletGroup;
 	EntityQuery playerGroup;
+	EntityQuery scrapGroup;
+
+	private BuildPhysicsWorld buildPhysicsWorld;
+	private StepPhysicsWorld stepPhysicsWorld;
 
 	protected override void OnCreate()
 	{
 		playerGroup = GetEntityQuery(typeof(Health), ComponentType.ReadOnly<Translation>(), ComponentType.ReadOnly<PlayerTag>());
 		enemyGroup = GetEntityQuery(typeof(Health), ComponentType.ReadOnly<Translation>(), ComponentType.ReadOnly<EnemyTag>());
 		bulletGroup = GetEntityQuery(typeof(TimeToLive), ComponentType.ReadOnly<Translation>());
+		scrapGroup = GetEntityQuery(typeof(ScrapTag), ComponentType.ReadOnly<Translation>());
+
+		buildPhysicsWorld = World.GetOrCreateSystem<BuildPhysicsWorld>();
+		stepPhysicsWorld = World.GetOrCreateSystem<StepPhysicsWorld>();
+	}
+
+	private struct NewCollisionJob : ITriggerEventsJob
+	{
+		public ComponentDataFromEntity<Health> enemyGroup;
+
+		[ReadOnly]
+		public ComponentDataFromEntity<TimeToLive> bulletGroup;
+
+		public void Execute(TriggerEvent triggerEvent)
+		{
+			if (bulletGroup.HasComponent(triggerEvent.Entities.EntityA))
+			{
+				if (enemyGroup.HasComponent(triggerEvent.Entities.EntityB))
+				{
+					Health health = enemyGroup[triggerEvent.Entities.EntityB];
+					health.Value -= 1;
+					enemyGroup[triggerEvent.Entities.EntityB] = health;
+				}
+			}
+
+			if (bulletGroup.HasComponent(triggerEvent.Entities.EntityB))
+			{
+				if (enemyGroup.HasComponent(triggerEvent.Entities.EntityA))
+				{
+					Health health = enemyGroup[triggerEvent.Entities.EntityA];
+					health.Value -= 1;
+					enemyGroup[triggerEvent.Entities.EntityA] = health;
+				}
+			}
+		}
 	}
 
 	struct CollisionJob : IJobChunk
@@ -37,8 +78,6 @@ public class CollisionSystem : JobComponentSystem
 		{
 			var chunkHealths = chunk.GetNativeArray(healthType);
 			var chunkTranslations = chunk.GetNativeArray(translationType);
-
-			Debug.Log(radiusSquared);
 
 			for (int i = 0; i < chunk.Count; i++)
 			{
@@ -65,13 +104,59 @@ public class CollisionSystem : JobComponentSystem
 		}
 	}
 
+	struct CollisionWithScrapJob : IJobChunk
+	{
+		public float radiusSquared;
+
+		public ArchetypeChunkComponentType<ScrapTag> scrapType;
+
+		[ReadOnly]
+		public ArchetypeChunkComponentType<Translation> translationType;
+
+		[DeallocateOnJobCompletion]
+		[ReadOnly]
+		public NativeArray<Translation> translationsToTestAgainst;
+
+		public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndext)
+		{
+			var chunkScrapTag = chunk.GetNativeArray(scrapType);
+			var chunkTranslations = chunk.GetNativeArray(translationType);
+
+			for (int i = 0; i < chunk.Count; i++)
+			{
+				bool playerPickedUp = false;
+				ScrapTag scrapTag = chunkScrapTag[i];
+				Translation position = chunkTranslations[i];
+
+				for (int j = 0; j < translationsToTestAgainst.Length; j++)
+				{
+					Translation position2 = translationsToTestAgainst[j];
+
+					if (CheckCollision(position.Value, position2.Value, radiusSquared))
+					{
+						playerPickedUp = true;
+					}
+				}
+
+				if (playerPickedUp)
+				{
+					Debug.Log("Scrap picked up");
+					scrapTag.pickedUp = true;
+					chunkScrapTag[i] = scrapTag;
+				}
+			}
+		}
+	}
+
 	protected override JobHandle OnUpdate(JobHandle inputDeps)
 	{
 		var healthType = GetArchetypeChunkComponentType<Health>(false);
 		var translationType = GetArchetypeChunkComponentType<Translation>(true);
+		var scrapType = GetArchetypeChunkComponentType<ScrapTag>(false);
 
-		float enemyRadius = 0.5f;
+		float enemyRadius = 1f;
 		float playerRadius = 2.5f;
+		float scrapRadius = 1f;
 
 		var jobEvB = new CollisionJob()
 		{
@@ -95,7 +180,25 @@ public class CollisionSystem : JobComponentSystem
 			translationsToTestAgainst = enemyGroup.ToComponentDataArray<Translation>(Allocator.TempJob)
 		};
 
-		return jobPvE.Schedule(playerGroup, jobHandle);
+		var playerVersusEnemiesHandle = jobPvE.Schedule(playerGroup, jobHandle);
+
+		var jobScrapOnPlayer = new CollisionWithScrapJob()
+		{
+			radiusSquared = scrapRadius * scrapRadius,
+			scrapType = scrapType,
+			translationType = translationType,
+			translationsToTestAgainst = playerGroup.ToComponentDataArray<Translation>(Allocator.TempJob)
+		};
+
+		return jobScrapOnPlayer.Schedule(scrapGroup, playerVersusEnemiesHandle);
+
+		//var enemyBulletsCollisionJob = new NewCollisionJob()
+		//{
+		//	bulletGroup = GetComponentDataFromEntity<TimeToLive>(),
+		//	enemyGroup = GetComponentDataFromEntity<Health>()
+		//};
+
+		//return enemyBulletsCollisionJob.Schedule(stepPhysicsWorld.Simulation, ref buildPhysicsWorld.PhysicsWorld, inputDeps);
 	}
 
 	static bool CheckCollision(float3 posA, float3 posB, float radiusSqr)

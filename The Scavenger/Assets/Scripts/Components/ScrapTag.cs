@@ -3,7 +3,7 @@ using Unity.Entities;
 using UnityEngine;
 
 [Serializable]
-[GenerateAuthoringComponent]
-public struct EnemyTag : IComponentData
+public struct ScrapTag : IComponentData
 {
+	public bool pickedUp;
 }

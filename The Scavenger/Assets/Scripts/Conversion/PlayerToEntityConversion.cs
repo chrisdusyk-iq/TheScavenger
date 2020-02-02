@@ -11,5 +11,8 @@ public class PlayerToEntityConversion : MonoBehaviour, IConvertGameObjectToEntit
 
 		Health health = new Health { Value = healthValue };
 		entityManager.AddComponentData(entity, health);
+
+		InventoryComponent inventory = new InventoryComponent { TotalScrap = 0 };
+		entityManager.AddComponentData(entity, inventory);
 	}
 }

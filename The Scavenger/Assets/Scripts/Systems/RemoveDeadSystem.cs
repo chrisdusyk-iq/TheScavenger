@@ -17,9 +17,16 @@ public class RemoveDeadSystem : ComponentSystem
 
 				else if (EntityManager.HasComponent(entity, typeof(EnemyTag)))
 				{
+					SpawnScrap(entity);
 					PostUpdateCommands.DestroyEntity(entity);
 				}
 			}
 		});
+	}
+
+	private void SpawnScrap(Entity robot)
+	{
+		Entity scrap = EntityManager.Instantiate(GameManager.main.scrapEntityPrefab);
+		EntityManager.SetComponentData(scrap, new Translation { Value = EntityManager.GetComponentData<Translation>(robot).Value });
 	}
 }

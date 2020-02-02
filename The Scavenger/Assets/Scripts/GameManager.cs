@@ -9,10 +9,23 @@ public class GameManager : MonoBehaviour
 
 	EntityManager entityManager;
 
+	[Header("Scrap")]
+	public GameObject scrapPrefab;
+
+	public Entity scrapEntityPrefab;
+	private BlobAssetStore blobAssetStore;
+
 	private void Awake()
 	{
 		main = this;
+		blobAssetStore = new BlobAssetStore();
 		entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+		scrapEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(scrapPrefab, GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, blobAssetStore));
+	}
+
+	private void OnDestroy()
+	{
+		blobAssetStore.Dispose();
 	}
 
 	public static void PlayerDied()

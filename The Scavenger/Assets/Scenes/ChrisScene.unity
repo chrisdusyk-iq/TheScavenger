@@ -376,6 +376,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 686248874}
+  scrapPrefab: {fileID: 493420124826673008, guid: ab35ffdc61d89ff41b28abc60a45a090,
+    type: 3}
 --- !u!4 &1204675221
 Transform:
   m_ObjectHideFlags: 0

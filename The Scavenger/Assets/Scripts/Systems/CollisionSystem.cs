@@ -50,6 +50,7 @@ public class CollisionSystem : JobComponentSystem
 
 					if (CheckCollision(pos.Value, pos2.Value, radius))
 					{
+						Debug.Log("Collision");
 						damage += 1;
 					}
 				}
@@ -99,7 +100,7 @@ public class CollisionSystem : JobComponentSystem
 	static bool CheckCollision(float3 posA, float3 posB, float radiusSqr)
 	{
 		float3 delta = posA - posB;
-		float distanceSquare = delta.x * delta.x + delta.z * delta.z;
+		float distanceSquare = delta.x * delta.x + delta.y * delta.y;
 
 		return distanceSquare <= radiusSqr;
 	}

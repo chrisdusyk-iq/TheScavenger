@@ -19,22 +19,9 @@ public class CharacterMovement : MonoBehaviour
 	public GameObject bulletPrefab;
 	public Transform gunBarrel;
 
-	EntityManager entityManager;
-	private Entity bulletEntityPrefab;
-
-	private BlobAssetStore blobAssetStore;
-
 	void Awake()
 	{
-		blobAssetStore = new BlobAssetStore();
 		_controls = new Controls();
-		entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-		bulletEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(bulletPrefab, GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, blobAssetStore));
-	}
-
-	private void OnDestroy()
-	{
-		blobAssetStore.Dispose();
 	}
 
 	private void OnEnable()
@@ -82,10 +69,14 @@ public class CharacterMovement : MonoBehaviour
 	{
 		while (true)
 		{
-			Entity bullet = entityManager.Instantiate(bulletEntityPrefab);
-			entityManager.SetComponentData(bullet, new Translation { Value = gunBarrel.position });
-			entityManager.SetComponentData(bullet, new Rotation { Value = gunBarrel.rotation });
-			
+			//Entity bullet = entityManager.Instantiate(bulletEntityPrefab);
+			//entityManager.SetComponentData(bullet, new Translation { Value = gunBarrel.position });
+			//entityManager.SetComponentData(bullet, new Rotation { Value = gunBarrel.rotation });
+
+			GameObject bullet = Instantiate(bulletPrefab) as GameObject;
+			bullet.transform.position = gunBarrel.position;
+			bullet.transform.rotation = gunBarrel.rotation;
+
 			yield return new WaitForSeconds(.15f);
 		}
 	}

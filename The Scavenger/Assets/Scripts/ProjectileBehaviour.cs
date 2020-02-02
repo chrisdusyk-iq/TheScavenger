@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class ProjectileBehaviour : MonoBehaviour, IConvertGameObjectToEntity
+public class ProjectileBehaviour : MonoBehaviour
 {
 	[Header("Movement")]
 	public float speed = 50f;
@@ -37,14 +37,14 @@ public class ProjectileBehaviour : MonoBehaviour, IConvertGameObjectToEntity
 		Destroy(gameObject);
 	}
 
-	public void Convert(Entity entity, EntityManager manager, GameObjectConversionSystem conversionSystem)
-	{
-		manager.AddComponent(entity, typeof(MoveForward));
+	//public void Convert(Entity entity, EntityManager manager, GameObjectConversionSystem conversionSystem)
+	//{
+	//	manager.AddComponent(entity, typeof(MoveForward));
 
-		MoveSpeed moveSpeed = new MoveSpeed { Value = speed };
-		manager.AddComponentData(entity, moveSpeed);
+	//	MoveSpeed moveSpeed = new MoveSpeed { Value = speed };
+	//	manager.AddComponentData(entity, moveSpeed);
 
-		TimeToLive timeToLive = new TimeToLive { Value = lifeTime };
-		manager.AddComponentData(entity, timeToLive);
-	}
+	//	TimeToLive timeToLive = new TimeToLive { Value = lifeTime };
+	//	manager.AddComponentData(entity, timeToLive);
+	//}
 }

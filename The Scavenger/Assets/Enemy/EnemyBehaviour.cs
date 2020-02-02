@@ -3,7 +3,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 
-public class EnemyBehaviour : MonoBehaviour, IConvertGameObjectToEntity
+public class EnemyBehaviour : MonoBehaviour
 {
 	[Header("Movement")]
 	public float speed = 5f;
@@ -42,15 +42,15 @@ public class EnemyBehaviour : MonoBehaviour, IConvertGameObjectToEntity
 		}
 	}
 
-	public void Convert(Entity entity, EntityManager manager, GameObjectConversionSystem conversionSystem)
-	{
-		manager.AddComponent(entity, typeof(EnemyTag));
-		manager.AddComponent(entity, typeof(MoveForward));
+	//public void Convert(Entity entity, EntityManager manager, GameObjectConversionSystem conversionSystem)
+	//{
+	//	manager.AddComponent(entity, typeof(EnemyTag));
+	//	manager.AddComponent(entity, typeof(MoveForward));
 
-		MoveSpeed moveSpeed = new MoveSpeed { Value = speed };
-		manager.AddComponentData(entity, moveSpeed);
+	//	MoveSpeed moveSpeed = new MoveSpeed { Value = speed };
+	//	manager.AddComponentData(entity, moveSpeed);
 
-		Health health = new Health { Value = enemyHealth };
-		manager.AddComponentData(entity, health);
-	}
+	//	Health health = new Health { Value = enemyHealth };
+	//	manager.AddComponentData(entity, health);
+	//}
 }

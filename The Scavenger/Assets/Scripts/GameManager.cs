@@ -1,6 +1,7 @@
 ﻿using Unity;
 using Unity.Entities;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class GameManager : MonoBehaviour
 	public Transform player;
 
 	EntityManager entityManager;
+	
 
 	private void Awake()
 	{
@@ -21,6 +23,8 @@ public class GameManager : MonoBehaviour
 			return;
 
 		main.player = null;
+		
+		SceneManager.LoadScene("EndScene");
 	}
 
 	public static bool IsPlayerDead()

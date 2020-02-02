@@ -22,11 +22,19 @@ public class CharacterMovement : MonoBehaviour
 	EntityManager entityManager;
 	private Entity bulletEntityPrefab;
 
+	private BlobAssetStore blobAssetStore;
+
 	void Awake()
 	{
+		blobAssetStore = new BlobAssetStore();
 		_controls = new Controls();
 		entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-		bulletEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(bulletPrefab, GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, new BlobAssetStore()));
+		bulletEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(bulletPrefab, GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, blobAssetStore));
+	}
+
+	private void OnDestroy()
+	{
+		blobAssetStore.Dispose();
 	}
 
 	private void OnEnable()

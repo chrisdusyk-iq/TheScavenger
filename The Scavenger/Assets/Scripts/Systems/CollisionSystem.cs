@@ -50,6 +50,7 @@ public class CollisionSystem : JobComponentSystem
 
 					if (CheckCollision(pos.Value, pos2.Value, radius))
 					{
+						Debug.Log("Collision");
 						damage += 1;
 					}
 				}

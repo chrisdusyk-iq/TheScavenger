@@ -22,7 +22,7 @@ public class EnemyBehaviour : MonoBehaviour, IConvertGameObjectToEntity
 		if (!GameManager.IsPlayerDead())
 		{
 			Vector3 heading = GameManager.PlayerPosition - transform.position;
-			heading.z = 0f;
+			heading.y = 0f;
 			transform.rotation = Quaternion.LookRotation(heading);
 		}
 

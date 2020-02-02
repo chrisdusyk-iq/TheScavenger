@@ -17,8 +17,8 @@ public class TurnTowardsPlayerSystem : JobComponentSystem
 		public void Execute([ReadOnly] ref Translation pos, ref Rotation rot)
 		{
 			float3 heading = playerPosition - pos.Value;
-			heading.z = 0f;
-			rot.Value = quaternion.LookRotation(heading, math.up());
+			heading.y = 0f;
+			rot.Value = Quaternion.LookRotation(heading, math.up());
 		}
 	}
 

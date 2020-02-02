@@ -1,7 +1,7 @@
 ﻿using Unity.Entities;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Rigidbody2D))]
 public class ProjectileBehaviour : MonoBehaviour, IConvertGameObjectToEntity
 {
 	[Header("Movement")]
@@ -10,12 +10,12 @@ public class ProjectileBehaviour : MonoBehaviour, IConvertGameObjectToEntity
 	[Header("Life Settings")]
 	public float lifeTime = 2f;
 
-	Rigidbody projectileRigidbody;
+	Rigidbody2D projectileRigidbody;
 
 
 	void Start()
 	{
-		projectileRigidbody = GetComponent<Rigidbody>();
+		projectileRigidbody = GetComponent<Rigidbody2D>();
 		Invoke("RemoveProjectile", lifeTime);
 	}
 

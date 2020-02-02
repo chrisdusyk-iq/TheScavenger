@@ -1,7 +1,7 @@
 ﻿using Unity.Entities;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Rigidbody2D))]
 
 public class EnemyBehaviour : MonoBehaviour, IConvertGameObjectToEntity
 {
@@ -10,11 +10,11 @@ public class EnemyBehaviour : MonoBehaviour, IConvertGameObjectToEntity
 	[Header("Life Settings")]
 	public int enemyHealth = 1;
 
-	Rigidbody rigidBody;
+	Rigidbody2D rigidBody;
 
 	void Start()
 	{
-		rigidBody = GetComponent<Rigidbody>();
+		rigidBody = GetComponent<Rigidbody2D>();
 	}
 
 	void Update()

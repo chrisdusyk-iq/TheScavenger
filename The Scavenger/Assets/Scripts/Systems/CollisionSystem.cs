@@ -79,8 +79,6 @@ public class CollisionSystem : JobComponentSystem
 			var chunkHealths = chunk.GetNativeArray(healthType);
 			var chunkTranslations = chunk.GetNativeArray(translationType);
 
-			Debug.Log(radiusSquared);
-
 			for (int i = 0; i < chunk.Count; i++)
 			{
 				float damage = 0f;

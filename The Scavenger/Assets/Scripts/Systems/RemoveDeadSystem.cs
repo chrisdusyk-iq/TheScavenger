@@ -20,6 +20,11 @@ public class RemoveDeadSystem : ComponentSystem
 					SpawnScrap(entity);
 					PostUpdateCommands.DestroyEntity(entity);
 				}
+
+				else if (EntityManager.HasComponent(entity, typeof(ScrapTag)))
+				{
+					PostUpdateCommands.DestroyEntity(entity);
+				}
 			}
 		});
 	}

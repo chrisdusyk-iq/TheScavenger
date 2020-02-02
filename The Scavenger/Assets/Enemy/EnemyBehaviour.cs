@@ -5,52 +5,52 @@ using UnityEngine;
 
 public class EnemyBehaviour : MonoBehaviour, IConvertGameObjectToEntity
 {
-    [Header("Movement")]
-    public float speed = 5f;
-    [Header("Life Settings")]
-    public int enemyHealth = 1;
+	[Header("Movement")]
+	public float speed = 5f;
+	[Header("Life Settings")]
+	public int enemyHealth = 1;
 
-    Rigidbody rigidBody;
+	Rigidbody rigidBody;
 
-    void Start()
-    {
-        rigidBody = GetComponent<Rigidbody>();
-    }
+	void Start()
+	{
+		rigidBody = GetComponent<Rigidbody>();
+	}
 
-    void Update()
-    {
-        if (!GameManager.IsPlayerDead())
-        {
-            Vector3 heading = GameManager.PlayerPosition - transform.position;
-            heading.z = 0f;
-            transform.rotation = Quaternion.LookRotation(heading);
-        }
+	void Update()
+	{
+		if (!GameManager.IsPlayerDead())
+		{
+			Vector3 heading = GameManager.PlayerPosition - transform.position;
+			heading.z = 0f;
+			transform.rotation = Quaternion.LookRotation(heading);
+		}
 
-        Vector3 movement = transform.forward * speed * Time.deltaTime;
-        rigidBody.MovePosition(transform.position + movement);
-    }
-    void OnTriggerEnter(Collider theCollider)
-    {
-        if (!theCollider.CompareTag("Bullet"))
-            return;
+		Vector3 movement = transform.forward * speed * Time.deltaTime;
+		rigidBody.MovePosition(transform.position + movement);
+	}
+	void OnTriggerEnter(Collider theCollider)
+	{
+		if (!theCollider.CompareTag("Bullet"))
+			return;
 
-        enemyHealth--;
+		enemyHealth--;
 
-        if (enemyHealth <= 0)
-        {
-            Destroy(gameObject);
-        }
-    }
+		if (enemyHealth <= 0)
+		{
+			Destroy(gameObject);
+		}
+	}
 
-    public void Convert(Entity entity, EntityManager manager, GameObjectConversionSystem conversionSystem)
-    {
-        manager.AddComponent(entity, typeof(EnemyTag));
-        manager.AddComponent(entity, typeof(MoveForward));
+	public void Convert(Entity entity, EntityManager manager, GameObjectConversionSystem conversionSystem)
+	{
+		manager.AddComponent(entity, typeof(EnemyTag));
+		manager.AddComponent(entity, typeof(MoveForward));
 
-        MoveSpeed moveSpeed = new MoveSpeed { Value = speed };
-        manager.AddComponentData(entity, moveSpeed);
+		MoveSpeed moveSpeed = new MoveSpeed { Value = speed };
+		manager.AddComponentData(entity, moveSpeed);
 
-        Health health = new Health { Value = enemyHealth };
-        manager.AddComponentData(entity, health);
-    }
+		Health health = new Health { Value = enemyHealth };
+		manager.AddComponentData(entity, health);
+	}
 }

@@ -6,7 +6,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
-[UpdateBefore(typeof(RobotMovementSystem))]
+[UpdateBefore(typeof(MoveForwardSystem))]
 public class TurnTowardsPlayerSystem : JobComponentSystem
 {
 	[RequireComponentTag(typeof(EnemyTag))]
@@ -17,7 +17,7 @@ public class TurnTowardsPlayerSystem : JobComponentSystem
 		public void Execute([ReadOnly] ref Translation pos, ref Rotation rot)
 		{
 			float3 heading = playerPosition - pos.Value;
-			heading.y = 0f;
+			heading.z = 0f;
 			rot.Value = quaternion.LookRotation(heading, math.up());
 		}
 	}

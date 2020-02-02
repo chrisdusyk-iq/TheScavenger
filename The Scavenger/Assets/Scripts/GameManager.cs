@@ -41,6 +41,6 @@ public class GameManager : MonoBehaviour
 		float s = Mathf.Sin(angle);
 		float c = Mathf.Cos(angle);
 
-		return new Vector3(c * radius, 1.1f, s * radius) + playerPos;
+		return new Vector3(c * radius, s * radius, 1.1f) + playerPos;
 	}
 }

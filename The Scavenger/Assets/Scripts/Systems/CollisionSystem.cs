@@ -63,7 +63,7 @@ public class CollisionSystem : JobComponentSystem
 
 	struct CollisionJob : IJobChunk
 	{
-		public float radius;
+		public float radiusSquared;
 
 		public ArchetypeChunkComponentType<Health> healthType;
 
@@ -79,6 +79,8 @@ public class CollisionSystem : JobComponentSystem
 			var chunkHealths = chunk.GetNativeArray(healthType);
 			var chunkTranslations = chunk.GetNativeArray(translationType);
 
+			Debug.Log(radiusSquared);
+
 			for (int i = 0; i < chunk.Count; i++)
 			{
 				float damage = 0f;
@@ -89,7 +91,7 @@ public class CollisionSystem : JobComponentSystem
 				{
 					Translation pos2 = translationsToTestAgainst[j];
 
-					if (CheckCollision(pos.Value, pos2.Value, radius))
+					if (CheckCollision(pos.Value, pos2.Value, radiusSquared))
 					{
 						damage += 1;
 					}
@@ -160,7 +162,7 @@ public class CollisionSystem : JobComponentSystem
 
 		var jobEvB = new CollisionJob()
 		{
-			radius = enemyRadius * enemyRadius,
+			radiusSquared = enemyRadius * enemyRadius,
 			healthType = healthType,
 			translationType = translationType,
 			translationsToTestAgainst = bulletGroup.ToComponentDataArray<Translation>(Allocator.TempJob)
@@ -174,7 +176,7 @@ public class CollisionSystem : JobComponentSystem
 
 		var jobPvE = new CollisionJob()
 		{
-			radius = playerRadius * playerRadius,
+			radiusSquared = playerRadius * playerRadius,
 			healthType = healthType,
 			translationType = translationType,
 			translationsToTestAgainst = enemyGroup.ToComponentDataArray<Translation>(Allocator.TempJob)

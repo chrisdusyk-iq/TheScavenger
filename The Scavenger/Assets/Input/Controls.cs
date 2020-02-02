@@ -22,7 +22,7 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""name"": ""Move"",
                     ""type"": ""PassThrough"",
                     ""id"": ""d5af32db-53f7-4cdf-9f74-401b571e3f15"",
-                    ""expectedControlType"": ""Vector2"",
+                    ""expectedControlType"": ""Dpad"",
                     ""processors"": """",
                     ""interactions"": """"
                 },

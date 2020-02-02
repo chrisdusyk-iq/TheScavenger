@@ -63,7 +63,7 @@ Transform:
   m_Children:
   - {fileID: 6527299621490611328}
   - {fileID: 3254305692812603997}
-  m_Father: {fileID: 6361441090792529193}
+  m_Father: {fileID: 5610713419062947692}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!33 &3899766885077228678
@@ -145,11 +145,55 @@ CircleCollider2D:
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_UsedByEffector: 1
+  m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!1 &5894986677074818267
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5610713419062947692}
+  - component: {fileID: 6996211324703289167}
+  m_Layer: 0
+  m_Name: Pivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5610713419062947692
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5894986677074818267}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 8112785194832921765}
+  m_Father: {fileID: 6361441090792529193}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6996211324703289167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5894986677074818267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55476764757a2414997cb09e659c40f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6361441090792529189
 GameObject:
   m_ObjectHideFlags: 0
@@ -160,7 +204,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6361441090792529193}
   - component: {fileID: 4506321759682140964}
-  - component: {fileID: 83352422344225561}
   m_Layer: 0
   m_Name: Scavenger
   m_TagString: Player
@@ -179,7 +222,7 @@ Transform:
   m_LocalPosition: {x: 0.09, y: 0, z: -4.77}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_Children:
-  - {fileID: 8112785194832921765}
+  - {fileID: 5610713419062947692}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -200,18 +243,6 @@ MonoBehaviour:
   bulletPrefab: {fileID: 4916778261759678254, guid: e84c14906007d1e42b7a72e480b783f1,
     type: 3}
   gunBarrel: {fileID: 3254305692812603997}
---- !u!114 &83352422344225561
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6361441090792529189}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55476764757a2414997cb09e659c40f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &9200940083760507409
 GameObject:
   m_ObjectHideFlags: 0

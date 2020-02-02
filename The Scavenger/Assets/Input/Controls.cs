@@ -41,6 +41,14 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""FireRelease"",
+                    ""type"": ""Button"",
+                    ""id"": ""ed2de635-9443-4194-97f1-cf982fe45173"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -120,6 +128,17 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""action"": ""Aim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d79df314-58d1-4916-a399-05278128e9ed"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FireRelease"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -137,6 +156,7 @@ public class @Controls : IInputActionCollection, IDisposable
         m_Character_Move = m_Character.FindAction("Move", throwIfNotFound: true);
         m_Character_Fire = m_Character.FindAction("Fire", throwIfNotFound: true);
         m_Character_Aim = m_Character.FindAction("Aim", throwIfNotFound: true);
+        m_Character_FireRelease = m_Character.FindAction("FireRelease", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -189,6 +209,7 @@ public class @Controls : IInputActionCollection, IDisposable
     private readonly InputAction m_Character_Move;
     private readonly InputAction m_Character_Fire;
     private readonly InputAction m_Character_Aim;
+    private readonly InputAction m_Character_FireRelease;
     public struct CharacterActions
     {
         private @Controls m_Wrapper;
@@ -196,6 +217,7 @@ public class @Controls : IInputActionCollection, IDisposable
         public InputAction @Move => m_Wrapper.m_Character_Move;
         public InputAction @Fire => m_Wrapper.m_Character_Fire;
         public InputAction @Aim => m_Wrapper.m_Character_Aim;
+        public InputAction @FireRelease => m_Wrapper.m_Character_FireRelease;
         public InputActionMap Get() { return m_Wrapper.m_Character; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -214,6 +236,9 @@ public class @Controls : IInputActionCollection, IDisposable
                 @Aim.started -= m_Wrapper.m_CharacterActionsCallbackInterface.OnAim;
                 @Aim.performed -= m_Wrapper.m_CharacterActionsCallbackInterface.OnAim;
                 @Aim.canceled -= m_Wrapper.m_CharacterActionsCallbackInterface.OnAim;
+                @FireRelease.started -= m_Wrapper.m_CharacterActionsCallbackInterface.OnFireRelease;
+                @FireRelease.performed -= m_Wrapper.m_CharacterActionsCallbackInterface.OnFireRelease;
+                @FireRelease.canceled -= m_Wrapper.m_CharacterActionsCallbackInterface.OnFireRelease;
             }
             m_Wrapper.m_CharacterActionsCallbackInterface = instance;
             if (instance != null)
@@ -227,6 +252,9 @@ public class @Controls : IInputActionCollection, IDisposable
                 @Aim.started += instance.OnAim;
                 @Aim.performed += instance.OnAim;
                 @Aim.canceled += instance.OnAim;
+                @FireRelease.started += instance.OnFireRelease;
+                @FireRelease.performed += instance.OnFireRelease;
+                @FireRelease.canceled += instance.OnFireRelease;
             }
         }
     }
@@ -245,5 +273,6 @@ public class @Controls : IInputActionCollection, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
+        void OnFireRelease(InputAction.CallbackContext context);
     }
 }

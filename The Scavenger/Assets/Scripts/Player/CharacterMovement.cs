@@ -19,6 +19,8 @@ public class CharacterMovement : MonoBehaviour
 	EntityManager entityManager;
 	private Entity bulletEntityPrefab;
 
+	private bool _fireDown = false;
+
 	void Awake()
 	{
 		_controls = new Controls();
@@ -40,6 +42,7 @@ public class CharacterMovement : MonoBehaviour
 	{
 		_controls.Character.Move.performed += Move_performed;
 		_controls.Character.Fire.performed += Fire_performed;
+		_controls.Character.FireRelease.performed += FireRelease_performed;
 		_controls.Character.Enable();
 	}
 
@@ -47,6 +50,7 @@ public class CharacterMovement : MonoBehaviour
 	{
 		_controls.Character.Move.performed -= Move_performed;
 		_controls.Character.Fire.performed -= Fire_performed;
+		_controls.Character.FireRelease.performed -= FireRelease_performed;
 		_controls.Character.Disable();
 	}
 
@@ -57,16 +61,28 @@ public class CharacterMovement : MonoBehaviour
 
 	private void Fire_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
 	{
-		Entity bullet = entityManager.Instantiate(bulletEntityPrefab);
-		//Vector3 rotation = gunBarrel.rotation.eulerAngles;
-		//rotation.z = 0f;
-		entityManager.SetComponentData(bullet, new Translation { Value = gunBarrel.position });
-		entityManager.SetComponentData(bullet, new Rotation { Value = gunBarrel.rotation });
+		StartCoroutine("FireBullet");
+	}
+
+	private void FireRelease_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+	{
+		StopCoroutine("FireBullet");
+	}
+
+	IEnumerator FireBullets()
+	{
+		while (true)
+		{
+			Entity bullet = entityManager.Instantiate(bulletEntityPrefab);
+
+			entityManager.SetComponentData(bullet, new Translation { Value = gunBarrel.position });
+			entityManager.SetComponentData(bullet, new Rotation { Value = gunBarrel.rotation });
+			yield return new WaitForSeconds(.15f);
+		}
 	}
 
 	private void Update()
 	{
 		transform.position += Time.deltaTime * new Vector3(_inputVector.x, _inputVector.y, 0) * _movementSpeed;
-
 	}
 }

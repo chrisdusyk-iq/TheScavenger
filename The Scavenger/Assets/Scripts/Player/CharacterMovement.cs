@@ -12,6 +12,9 @@ public class CharacterMovement : MonoBehaviour
 	[SerializeField]
 	private float _movementSpeed = 20.0f;
 
+	[Header("Life Settings")]
+	public float playerHealth = 1f;
+
 	[Header("Bullets")]
 	public GameObject bulletPrefab;
 	public Transform gunBarrel;
@@ -19,13 +22,19 @@ public class CharacterMovement : MonoBehaviour
 	EntityManager entityManager;
 	private Entity bulletEntityPrefab;
 
-	private bool _fireDown = false;
+	private BlobAssetStore blobAssetStore;
 
 	void Awake()
 	{
+		blobAssetStore = new BlobAssetStore();
 		_controls = new Controls();
 		entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-		bulletEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(bulletPrefab, GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, new BlobAssetStore()));
+		bulletEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(bulletPrefab, GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, blobAssetStore));
+	}
+
+	private void OnDestroy()
+	{
+		blobAssetStore.Dispose();
 	}
 
 	private void OnEnable()
@@ -84,5 +93,16 @@ public class CharacterMovement : MonoBehaviour
 	private void Update()
 	{
 		transform.position += Time.deltaTime * new Vector3(_inputVector.x, _inputVector.y, 0) * _movementSpeed;
+	}
+
+	private void OnTriggerEnter(Collider other)
+	{
+		if (!other.CompareTag("Enemy"))
+			return;
+
+		playerHealth--;
+
+		if (playerHealth <= 0)
+			GameManager.PlayerDied();
 	}
 }

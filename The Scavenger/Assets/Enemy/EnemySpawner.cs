@@ -16,13 +16,22 @@ public class EnemySpawner : MonoBehaviour
 	EntityManager manager;
 	Entity enemyEntityPrefab;
 
+	BlobAssetStore blobAssetStore;
+
 	float cooldown;
 
 	void Start()
 	{
+		blobAssetStore = new BlobAssetStore();
 		manager = World.DefaultGameObjectInjectionWorld.EntityManager;
-		enemyEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(enemyPrefab, GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, new BlobAssetStore()));
+		enemyEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(enemyPrefab, GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, blobAssetStore));
 	}
+
+	private void OnDestroy()
+	{
+		blobAssetStore.Dispose();
+	}
+
 	private void Update()
 	{
 		if (!spawnEnemies || GameManager.IsPlayerDead())

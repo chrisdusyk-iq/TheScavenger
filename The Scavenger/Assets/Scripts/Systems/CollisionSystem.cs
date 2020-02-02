@@ -12,12 +12,14 @@ public class CollisionSystem : JobComponentSystem
 	EntityQuery enemyGroup;
 	EntityQuery bulletGroup;
 	EntityQuery playerGroup;
+	EntityQuery scrapGroup;
 
 	protected override void OnCreate()
 	{
 		playerGroup = GetEntityQuery(typeof(Health), ComponentType.ReadOnly<Translation>(), ComponentType.ReadOnly<PlayerTag>());
 		enemyGroup = GetEntityQuery(typeof(Health), ComponentType.ReadOnly<Translation>(), ComponentType.ReadOnly<EnemyTag>());
 		bulletGroup = GetEntityQuery(typeof(TimeToLive), ComponentType.ReadOnly<Translation>());
+		scrapGroup = GetEntityQuery(typeof(ScrapTag), ComponentType.ReadOnly<Translation>());
 	}
 
 	struct CollisionJob : IJobChunk
@@ -50,7 +52,6 @@ public class CollisionSystem : JobComponentSystem
 
 					if (CheckCollision(pos.Value, pos2.Value, radius))
 					{
-						Debug.Log("Collision");
 						damage += 1;
 					}
 				}
@@ -64,13 +65,60 @@ public class CollisionSystem : JobComponentSystem
 		}
 	}
 
+	struct CollisionWithScrapJob : IJobChunk
+	{
+		public float radius;
+
+		[ReadOnly]
+		public ArchetypeChunkComponentType<ScrapTag> scrapType;
+
+		[ReadOnly]
+		public ArchetypeChunkComponentType<Translation> translationType;
+
+		[DeallocateOnJobCompletion]
+		[ReadOnly]
+		public NativeArray<Translation> translationsToTestAgainst;
+
+		public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndext)
+		{
+			var chunkScrapTag = chunk.GetNativeArray(scrapType);
+			var chunkTranslations = chunk.GetNativeArray(translationType);
+
+			for (int i = 0; i < chunk.Count; i++)
+			{
+				bool playerPickedUp = false;
+				ScrapTag scrapTag = chunkScrapTag[i];
+				Translation position = chunkTranslations[i];
+
+				for (int j = 0; j < translationsToTestAgainst.Length; j++)
+				{
+					Translation position2 = translationsToTestAgainst[j];
+
+					if (CheckCollision(position.Value, position2.Value, radius))
+					{
+						playerPickedUp = true;
+					}
+				}
+
+				if (playerPickedUp)
+				{
+					Debug.Log("Scrap picked up");
+					scrapTag.pickedUp = true;
+					chunkScrapTag[i] = scrapTag;
+				}
+			}
+		}
+	}
+
 	protected override JobHandle OnUpdate(JobHandle inputDeps)
 	{
 		var healthType = GetArchetypeChunkComponentType<Health>(false);
 		var translationType = GetArchetypeChunkComponentType<Translation>(true);
+		var scrapType = GetArchetypeChunkComponentType<ScrapTag>(false);
 
 		float enemyRadius = 0.3f;
 		float playerRadius = 0.5f;
+		float scrapRadius = 0.2f;
 
 		var jobEvB = new CollisionJob()
 		{
@@ -94,7 +142,17 @@ public class CollisionSystem : JobComponentSystem
 			translationsToTestAgainst = enemyGroup.ToComponentDataArray<Translation>(Allocator.TempJob)
 		};
 
-		return jobPvE.Schedule(playerGroup, jobHandle);
+		JobHandle playerVersusEnemyHandle = jobPvE.Schedule(playerGroup, jobHandle);
+
+		var jobPlayerOnScrap = new CollisionWithScrapJob()
+		{
+			radius = scrapRadius * scrapRadius,
+			scrapType = scrapType,
+			translationType = translationType,
+			translationsToTestAgainst = scrapGroup.ToComponentDataArray<Translation>(Allocator.TempJob)
+		};
+
+		return jobPlayerOnScrap.Schedule(playerGroup, jobHandle);
 	}
 
 	static bool CheckCollision(float3 posA, float3 posB, float radiusSqr)

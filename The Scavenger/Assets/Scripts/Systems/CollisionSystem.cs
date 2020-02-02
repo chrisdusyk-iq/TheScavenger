@@ -83,8 +83,8 @@ public class CollisionSystem : JobComponentSystem
 		JobHandle jobHandle = jobEvB.Schedule(enemyGroup, inputDeps);
 
 		// Handle player death
-		//if (Settings.IsPlayerDead())
-		//	return jobHandle;
+		if (GameManager.IsPlayerDead())
+			return jobHandle;
 
 		var jobPvE = new CollisionJob()
 		{

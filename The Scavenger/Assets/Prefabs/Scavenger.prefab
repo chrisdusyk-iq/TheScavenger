@@ -163,7 +163,7 @@ GameObject:
   - component: {fileID: 83352422344225561}
   m_Layer: 0
   m_Name: Scavenger
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -196,6 +196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movementSpeed: 20
+  playerHealth: 1
   bulletPrefab: {fileID: 4916778261759678254, guid: e84c14906007d1e42b7a72e480b783f1,
     type: 3}
   gunBarrel: {fileID: 3254305692812603997}

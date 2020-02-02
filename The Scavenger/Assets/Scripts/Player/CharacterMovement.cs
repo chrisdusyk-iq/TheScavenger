@@ -70,12 +70,12 @@ public class CharacterMovement : MonoBehaviour
 
 	private void Fire_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
 	{
-		StartCoroutine("FireBullet");
+		StartCoroutine(nameof(FireBullets));
 	}
 
 	private void FireRelease_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
 	{
-		StopCoroutine("FireBullet");
+		StopCoroutine(nameof(FireBullets));
 	}
 
 	IEnumerator FireBullets()
@@ -83,9 +83,9 @@ public class CharacterMovement : MonoBehaviour
 		while (true)
 		{
 			Entity bullet = entityManager.Instantiate(bulletEntityPrefab);
-
 			entityManager.SetComponentData(bullet, new Translation { Value = gunBarrel.position });
 			entityManager.SetComponentData(bullet, new Rotation { Value = gunBarrel.rotation });
+			
 			yield return new WaitForSeconds(.15f);
 		}
 	}
